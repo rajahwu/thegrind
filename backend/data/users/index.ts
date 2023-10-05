@@ -8,7 +8,7 @@ interface Profile {
 }
 
 interface UserData extends User {
-    address: Address
+    address?: Address | null
     name: string
     phone: string
 }
@@ -40,15 +40,15 @@ export async function getUsers() {
     response.data.forEach((user: UserData) => {
         const password = 'secert';
 
-        const { username, email, name, address, phone } = user;
+        const { username, email, name, phone } = user;
 
         const canidate: User = {
             id: uuidv4(),
-            username,
-            email,
+            username: username.toLowerCase(),
+            email: email.toLocaleLowerCase(),
             password,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toDateString()
+            updated_at: new Date().toISOString()
         };
 
         const profile: UserProfile = {
@@ -65,6 +65,10 @@ export async function getUsers() {
         })
     })
 
-
+    return users
 }
 
+(async () => {
+    const usersData = await getUsers();
+    console.log(usersData);
+})();
