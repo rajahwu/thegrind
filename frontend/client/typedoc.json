@@ -1,0 +1,12 @@
+{
+    "out": "./docs",
+    "entryPointStrategy": "expand",
+    "entryPoints": [
+        "./src/app",
+        "./src/components",
+        "./src/utils",
+        "./global.types.ts"],
+    "exclude": ["**/node_modules/**/*", "**.next/**"],
+    "excludeExternals": false,
+    "theme": "default"
+}

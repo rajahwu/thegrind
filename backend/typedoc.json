@@ -1,7 +1,8 @@
 {
     "out": "./docs",
-    "entryPoints": ["./server.ts", "./data/index.ts", "./data/users/index.ts", "./data/database.types.ts"],
-    "exclude": ["**/node_modules/**/*"],
-    "excludeExternals": true,
+    "entryPointStrategy": "expand",
+    "entryPoints": ["./"],
+    "exclude": ["**/node_modules/**/*", "**/build/**", "**/docs/**"],
+    "excludeExternals": false,
     "theme": "default"
 }
