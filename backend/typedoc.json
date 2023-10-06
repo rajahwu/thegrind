@@ -1,0 +1,8 @@
+{
+    "out": "./docs",
+    "entryPoints": ["./server.ts"],
+    "includes": "./data/**/*.ts",
+    "exclude": ["**/node_modules/**/*"],
+    "excludeExternals": true,
+    "theme": "default"
+}

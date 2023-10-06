@@ -6,9 +6,9 @@ const port = 8000;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("the daily grind");
-});
+app.get("/docs", (req, res) => {
+    res.sendFile(__dirname + "/docs/modules.html");
+})
 
 app.get("/users", async (req, res) => {
     try {
@@ -22,16 +22,29 @@ app.get("/users", async (req, res) => {
 
 app.get("/users/:id",async (req, res) => {
     try {
-        const userId = req.params.id;
+        const userId: number = parseInt(req.params.id, 10);
         const users = await getUsers();
         if(!users) return;
+
+        if(userId < 0 || userId >= users.length) {
+            throw new Error("User not found");
+        }
+
         const user = users[userId] ?? null;
         if(!user) throw new Error("user not found");
         res.json( user );
     } catch (err) {
-        res.status(500);
+        let message
+        if(err instanceof Error) message = err.message
+        else message = String(err)
+        res.status(500).json({ error: message });
     }
 })
+
+app.get("/", (req, res) => {
+    res.send("the daily grind");
+});
+
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);

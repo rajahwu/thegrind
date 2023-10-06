@@ -29,65 +29,92 @@ interface Geo {
     lng: string
 }
 
+class UserCandidate implements User {
+    id: string;
+    username: string;
+    email: string;
+    password: string;
+    created_at: string;
+    updated_at: string;
+
+   constructor(username: string, email: string, password: string) {
+        this.id = uuidv4();
+        this.username = username.toLowerCase();
+        this.email = email.toLowerCase();
+        this.password = password;
+        this.created_at = new Date().toISOString();
+        this.updated_at = new Date().toISOString();
+    }
+
+   static async hashPassword(password: string) {
+      return await Bun.password.hash(password, {
+            algorithm: "bcrypt",
+            cost: 4
+        });
+    }
+}
+
+class UserProfileData implements UserProfile {
+    id: string;
+    user_id: string;
+    name: string;
+    phone: string;
+    created_at: string;
+    updated_at: string;
+
+    constructor(user_id: string, name: string, phone: string) {
+        this.id = uuidv4();
+        this.user_id = user_id;
+        this.name = name.toLowerCase();
+        this.phone = phone;
+        this.created_at = new Date().toISOString();
+        this.updated_at = new Date().toISOString();
+    }
+}
+
+export async function createUser(userData: UserData): Promise<Profile> {
+    try {
+        const { username, email, password, name, phone } = userData;
+        
+
+        // Hash the provided password
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        // Create a UserCandidate object
+        const userCandidate = new UserCandidate(username, email, hashedPassword);
+        // Create a UserProfileData object
+        const userProfileData = new UserProfileData(userCandidate.id, name, phone);
+
+        // Simulate storing the user and profile data in the database (in a real app, you'd use a database)
+        // For this example, we'll just return the created user and profile objects.
+        return {
+            user: userCandidate,
+            profile: userProfileData,
+        };
+    } catch (error) {
+        console.error("Error creating user: ", error);
+        throw error;
+    }
+}
 
 export async function getUsers() {
-
-    const users: Profile[] = []
-
-    try {
-
+    
+    const users = []
+    
+    const response = await axios.get(
+        "https://jsonplaceholder.typicode.com/users"
+        );
         
-        const response = await axios.get(
-            "https://jsonplaceholder.typicode.com/users"
-            );
-            
-            const hashedUserPromises =  response.data.map(async function (user: UserData) {
-
-                const password = 'secert' as string;
-                
-                // const hashedPassword = await bcrypt.hash(password, 12);
-                const hashedPassword = await Bun.password.hash(password, {
-                    algorithm: "bcrypt",
-                    cost: 12
-                });
-                
-                const { username, email, name, phone } = user;
-                
-                // const hashedPassword = 'hashedpassword';
-                
-                const canidate: User = {
-                    id: uuidv4(),
-                    username: username.toLowerCase(),
-                    email: email.toLocaleLowerCase(),
-                    password: hashedPassword,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        };
-        
-        const profile: UserProfile = {
-            id: uuidv4(),
-            user_id: canidate.id,
-            name: name.toLowerCase(),
-            phone,
-            created_at: canidate.created_at,
-            updated_at: canidate.updated_at,
-        };
-        users.push({
-            user: canidate,
-            profile: profile
-        });
-    });
-    
-    await Promise.all(hashedUserPromises);
-    
-    return users
-} catch (error) {
-    console.error("Error fetching or processing data: ", error);
-    throw error;
-    
+        for(const user of response.data) {
+            const password = await UserCandidate.hashPassword('secert');
+            const { username, email, name, phone } = user;
+            const candidate = new UserCandidate(username, email, password);
+            const profile = new UserProfileData(candidate.id, name, phone);
+            users.push({user: candidate, profile: profile});
+            }
+    return users;
 }
-}
-
+       
 // test getUsers
 // (async () => {
 //     try {
