@@ -29,7 +29,7 @@ interface Geo {
     lng: string
 }
 
-class UserCandidate implements User {
+export class UserCandidate implements User {
     id: string;
     username: string;
     email: string;
@@ -54,7 +54,7 @@ class UserCandidate implements User {
     }
 }
 
-class UserProfileData implements UserProfile {
+export class UserProfileData implements UserProfile {
     id: string;
     user_id: string;
     name: string;

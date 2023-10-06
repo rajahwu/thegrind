@@ -1,7 +1,6 @@
 {
     "out": "./docs",
-    "entryPoints": ["./server.ts"],
-    "includes": "./data/**/*.ts",
+    "entryPoints": ["./server.ts", "./data/index.ts", "./data/users/index.ts", "./data/database.types.ts"],
     "exclude": ["**/node_modules/**/*"],
     "excludeExternals": true,
     "theme": "default"
