@@ -2,7 +2,6 @@ import { type TaskData } from "../../../global.types";
 import TasksCard from "@/components/TasksCard";
 import Link from "next/link";
 
-
 const tasks: TaskData[] = [
   {
     title: "Complete assignment",
@@ -26,16 +25,6 @@ const tasks: TaskData[] = [
   },
 ];
 
-
 export default function Page() {
-  return (
-    <>
-      <h1>Dashboard</h1>
-      <Link href="/login">Login</Link>
-      <Link href="/register">Sign Up</Link>
-      <div>
-      <TasksCard tasks={tasks} />
-      </div>
-    </>
-  );
+  return <TasksCard tasks={tasks} />;
 }
