@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { User, UserProfile } from "../database.types";
 
-interface Profile {
+interface Member {
     user: User,
     profile: UserProfile
 }
@@ -36,6 +36,7 @@ export class UserCandidate implements User {
     password: string;
     created_at: string;
     updated_at: string;
+    errors?: string[];
 
    constructor(username: string, email: string, password: string) {
         this.id = uuidv4();
@@ -72,7 +73,7 @@ export class UserProfileData implements UserProfile {
     }
 }
 
-export async function createUser(userData: UserData): Promise<Profile> {
+export async function createUser(userData: UserData): Promise<Member> {
     try {
         const { username, email, password, name, phone } = userData;
         
@@ -85,8 +86,8 @@ export async function createUser(userData: UserData): Promise<Profile> {
         // Create a UserProfileData object
         const userProfileData = new UserProfileData(userCandidate.id, name, phone);
 
-        // Simulate storing the user and profile data in the database (in a real app, you'd use a database)
-        // For this example, we'll just return the created user and profile objects.
+        // Simulate storing the user and profile data in the database
+        // Return the created user and profile objects.
         return {
             user: userCandidate,
             profile: userProfileData,
@@ -109,6 +110,7 @@ export async function getUsers() {
             const password = await UserCandidate.hashPassword('secert');
             const { username, email, name, phone } = user;
             const candidate = new UserCandidate(username, email, password);
+            if(candidate.errors) throw new Error(candidate.errors[0]); 
             const profile = new UserProfileData(candidate.id, name, phone);
             users.push({user: candidate, profile: profile});
             }

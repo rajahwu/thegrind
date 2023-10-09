@@ -1,0 +1,7 @@
+=== Project Setup ===
+
+=== Database Setup ===
+
+=== Utility Commands ===
+bun build --target=node --outdir=build ./server.ts ./data/**/*.ts
+tree -I 'node_modules'

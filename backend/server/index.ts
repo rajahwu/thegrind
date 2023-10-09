@@ -1,5 +1,5 @@
 import express from "express";
-import { getUsers } from "./data/users";
+import { getUsers } from "../data/users";
 
 const app = express();
 const port = 8000;
