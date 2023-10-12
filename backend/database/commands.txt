@@ -1,0 +1,1 @@
+sequelize model:generate --name User --attributes username:string email:string password:string created_at:date updated_at:date

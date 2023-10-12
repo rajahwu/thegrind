@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "outDir": "../build/database",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true
+    // Add any other necessary compiler options
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
+}
