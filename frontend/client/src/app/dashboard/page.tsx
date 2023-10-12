@@ -1,6 +1,5 @@
 import { type TaskData } from "../../../global.types";
 import TasksCard from "@/components/TasksCard";
-import Link from "next/link";
 
 const tasks: TaskData[] = [
   {
