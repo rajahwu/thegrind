@@ -1,0 +1,52 @@
+Project TheDailyGrind {
+    database_type: 'PostgrsSQL'
+}
+
+Table users as U {
+    id uuid [pk, ref: < events.id, ref: < tasks.id]
+    username varchar [not null, unique]
+    email varchar [not null, unique]
+    password varchar [not null]
+    created_at datetime [default: `now()`]
+    updated_at datetime [default: `now()`]
+}
+
+Table user_profiles {
+    id uuid [pk]
+    user_id uuid [ref: > U.id]
+    avatar varchar
+    name varchar
+    phone varchar
+    address_id uuid
+    social varchar [note: 'social media string']
+    created_at datetime [default: `U.created_at`]
+    updated_at datetime [default: `U.created_at`]
+}
+
+Table address {
+    id uuid [pk]
+    street varchar
+    steet varchar
+    city varchar
+    zipcode varchar
+    geo varchar [note: '\"lat\" / \"lng\"']
+    created_at datetime
+    updated_at datetime
+}
+
+Table events {
+    id uuid [pk]
+    user_id uuid [ref: > U.id]
+    title varchar
+    start datetime
+    end datetime
+    created_at datetime
+    updated_at datetime
+}
+
+Table tasks {
+    id uudi [pk]
+    user_id uuid [ref: > U.id]
+    title varchar
+    isComplete bool
+}
