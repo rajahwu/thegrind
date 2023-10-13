@@ -1,6 +1,6 @@
 import express from "express";
 import authRouter from "./auth";
-import tasksRouter from "./tasks";
+import tasksRouter from "./api/tasks";
 
 import { getUsers } from "../data/users";
 
