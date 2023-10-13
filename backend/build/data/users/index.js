@@ -53,21 +53,11 @@ var UserCandidate = /** @class */ (function () {
         this.updated_at = new Date().toISOString();
     }
     UserCandidate.hashPassword = function (password) {
-        return __awaiter(this, void 0, void 0, function () {
-            var saltRounds;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        saltRounds = 10;
-                        return [4 /*yield*/, bcrypt_1.default.hash(password, saltRounds, function (err, hash) {
-                                password = hash;
-                            })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, password];
-                }
-            });
+        var saltRounds = 10;
+        bcrypt_1.default.hash(password, saltRounds, function (err, hash) {
+            password = hash;
         });
+        return password;
     };
     return UserCandidate;
 }());

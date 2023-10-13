@@ -47,9 +47,9 @@ export class UserCandidate implements User {
     this.updated_at = new Date().toISOString();
   }
 
-  static async hashPassword(password: string) {
+  static hashPassword(password: string) {
     const saltRounds = 10;
-    await bcrypt.hash(password, saltRounds, (err, hash) => {
+    bcrypt.hash(password, saltRounds, (err, hash) => {
         password = hash    
     });
     return password
