@@ -1,5 +1,5 @@
 === User Model ===
-sequelize model:generate --name User --attributes "id:uuid,username:string,email:string,password:string,created_at:date,updated_at:date"
+sequelize model:generate --name User --attributes "id:uuid,username:string,email:string,password:string"
 
 === UserProfiles ===
 sequelize model:generate --name UserProfile --attributes "id:uuid,user_id:uuid,avatar:string,name:string,phone:string,address_id:uuid,social:string,created_at:datetime,updated_at:datetime"
