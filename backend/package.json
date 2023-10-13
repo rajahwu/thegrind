@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "dev:server": "bun --hot ./server/index.ts",
-    "tscompile:migrations": "bun build ./**/*.ts --outdir ./build --target node"
+    "tsc:server": "npx tsc ./server/**/*.ts --outDir ./build/server --esModuleInterop true"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.23.2",
     "@types/node": "^20.8.5",
     "@types/validator": "^13.11.2",
     "babel-register": "^6.26.0",
@@ -17,6 +18,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/register": "^7.22.15",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.18",
     "@types/sequelize": "^4.28.16",

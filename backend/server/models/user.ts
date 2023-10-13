@@ -1,6 +1,6 @@
 import {
     Sequelize,
-    DataTypes
+    DataTypes,
 } from 'sequelize';
 
 export interface UserAttributes {
@@ -12,18 +12,17 @@ export interface UserAttributes {
 }
 
 export interface UserInstance {
-    id: number;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
 
-    id: string;
     username: string;
     email: string;
     password: string;
 
 }
 
-export = (sequelize: Sequelize, DataTypes: DataTypes) => {
+const User = (sequelize: Sequelize, DataTypes: DataTypes) => {
     var User = sequelize.define('User', {
         id: DataTypes.UUID,
         username: DataTypes.STRING,
@@ -37,3 +36,5 @@ export = (sequelize: Sequelize, DataTypes: DataTypes) => {
 
     return User;
 };
+
+export default User

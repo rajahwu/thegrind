@@ -1,47 +1,47 @@
+require("@babel/register");
+
 import {
-    QueryInterface,
-    SequelizeStatic
-} from 'sequelize';
+  QueryInterface,
+  // @ts-ignore
+  SequelizeStatic,
+} from "sequelize";
 
-export = {
-    up: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
-        return queryInterface.createTable('Users', {
-            id: {
-                allowNull: false,
-                autoIncrement: true,
-                primaryKey: true,
-                type: Sequelize.INTEGER
-            },
+const User = {
+  up: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+    return queryInterface.createTable("Users", {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.UUID,
+      },
 
-            id: {
-                type: Sequelize.UUID
-            },
+      username: {
+        type: Sequelize.STRING,
+      },
 
-            username: {
-                type: Sequelize.STRING
-            },
+      email: {
+        type: Sequelize.STRING,
+      },
 
-            email: {
-                type: Sequelize.STRING
-            },
+      password: {
+        type: Sequelize.STRING,
+      },
 
-            password: {
-                type: Sequelize.STRING
-            },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
 
-            createdAt: {
-                allowNull: false,
-                type: Sequelize.DATE
-            },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+    });
+  },
 
-            updatedAt: {
-                allowNull: false,
-                type: Sequelize.DATE
-            }
-        });
-    },
-
-    down: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
-        return queryInterface.dropTable('Users');
-    }
+  down: (queryInterface: QueryInterface, Sequelize: SequelizeStatic) => {
+    return queryInterface.dropTable("Users");
+  },
 };
+
+export default User;
