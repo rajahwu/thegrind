@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev:server": "bun --hot ./server/index.ts",
-    "tsc:server": "npx tsc ./server/**/*.ts --outDir ./build/server --esModuleInterop true"
+    "tsc:server": "npx tsc ./server/**/*.ts --outDir ./build/server --esModuleInterop true",
+    "tsc:migrations": "npx tsc ./server/migrations/*.ts --outDir ./build/server/migrations --esModuleInterop true"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.2",
