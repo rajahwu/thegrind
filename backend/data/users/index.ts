@@ -1,122 +1,121 @@
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcrypt';
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
 import { User, UserProfile } from "../database.types";
 
 interface Member {
-    user: User,
-    profile: UserProfile
+  user: User;
+  profile: UserProfile;
 }
 
 interface UserData extends User {
-    address?: Address | null
-    name: string
-    phone: string
+  address?: Address | null;
+  name: string;
+  phone: string;
 }
 
 interface Address {
-    id: string
-    street: string
-    suite: string
-    city: string
-    zipcode: string
-    geo: Geo
+  id: string;
+  street: string;
+  suite: string;
+  city: string;
+  zipcode: string;
+  geo: Geo;
 }
 
 interface Geo {
-    id: string
-    lat: string
-    lng: string
+  id: string;
+  lat: string;
+  lng: string;
 }
 
 export class UserCandidate implements User {
-    id: string;
-    username: string;
-    email: string;
-    password: string;
-    created_at: string;
-    updated_at: string;
-    errors?: string[];
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  created_at: string;
+  updated_at: string;
+  errors?: string[];
 
-   constructor(username: string, email: string, password: string) {
-        this.id = uuidv4();
-        this.username = username.toLowerCase();
-        this.email = email.toLowerCase();
-        this.password = password;
-        this.created_at = new Date().toISOString();
-        this.updated_at = new Date().toISOString();
-    }
+  constructor(username: string, email: string, password: string) {
+    this.id = uuidv4();
+    this.username = username.toLowerCase();
+    this.email = email.toLowerCase();
+    this.password = password;
+    this.created_at = new Date().toISOString();
+    this.updated_at = new Date().toISOString();
+  }
 
-   static async hashPassword(password: string) {
-      return await Bun.password.hash(password, {
-            algorithm: "bcrypt",
-            cost: 4
-        });
-    }
+  static async hashPassword(password: string) {
+    const saltRounds = 10;
+    await bcrypt.hash(password, saltRounds, (err, hash) => {
+        password = hash    
+    });
+    return password
+  }
 }
 
 export class UserProfileData implements UserProfile {
-    id: string;
-    user_id: string;
-    name: string;
-    phone: string;
-    created_at: string;
-    updated_at: string;
+  id: string;
+  user_id: string;
+  name: string;
+  phone: string;
+  created_at: string;
+  updated_at: string;
 
-    constructor(user_id: string, name: string, phone: string) {
-        this.id = uuidv4();
-        this.user_id = user_id;
-        this.name = name.toLowerCase();
-        this.phone = phone;
-        this.created_at = new Date().toISOString();
-        this.updated_at = new Date().toISOString();
-    }
+  constructor(user_id: string, name: string, phone: string) {
+    this.id = uuidv4();
+    this.user_id = user_id;
+    this.name = name.toLowerCase();
+    this.phone = phone;
+    this.created_at = new Date().toISOString();
+    this.updated_at = new Date().toISOString();
+  }
 }
 
 export async function createUser(userData: UserData): Promise<Member> {
-    try {
-        const { username, email, password, name, phone } = userData;
-        
+  try {
+    const { username, email, password, name, phone } = userData;
 
-        // Hash the provided password
-        const hashedPassword = await bcrypt.hash(password, 12);
+    // Hash the provided password
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-        // Create a UserCandidate object
-        const userCandidate = new UserCandidate(username, email, hashedPassword);
-        // Create a UserProfileData object
-        const userProfileData = new UserProfileData(userCandidate.id, name, phone);
+    // Create a UserCandidate object
+    const userCandidate = new UserCandidate(username, email, hashedPassword);
+    // Create a UserProfileData object
+    const userProfileData = new UserProfileData(userCandidate.id, name, phone);
 
-        // Simulate storing the user and profile data in the database
-        // Return the created user and profile objects.
-        return {
-            user: userCandidate,
-            profile: userProfileData,
-        };
-    } catch (error) {
-        console.error("Error creating user: ", error);
-        throw error;
-    }
+    // Simulate storing the user and profile data in the database
+    // Return the created user and profile objects.
+    return {
+      user: userCandidate,
+      profile: userProfileData,
+    };
+  } catch (error) {
+    console.error("Error creating user: ", error);
+    throw error;
+  }
 }
 
 export async function getUsers() {
-    
-    const users = []
-    
-    const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/users"
-        );
-        
-        for(const user of response.data) {
-            const password = await UserCandidate.hashPassword('secert');
-            const { username, email, name, phone } = user;
-            const candidate = new UserCandidate(username, email, password);
-            if(candidate.errors) throw new Error(candidate.errors[0]); 
-            const profile = new UserProfileData(candidate.id, name, phone);
-            users.push({user: candidate, profile: profile});
-            }
-    return users;
+  const users = [];
+
+  const response = await axios.get(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+
+  for (const user of response.data) {
+    const password = await UserCandidate.hashPassword("secert");
+    const { username, email, name, phone } = user;
+    const candidate = new UserCandidate(username, email, password);
+    if (candidate.errors) throw new Error(candidate.errors[0]);
+    const profile = new UserProfileData(candidate.id, name, phone);
+    users.push({ user: candidate, profile: profile });
+  }
+  return users;
 }
-       
+
 // test getUsers
 // (async () => {
 //     try {
