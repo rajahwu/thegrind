@@ -1,0 +1,41 @@
+import {
+    Sequelize,
+    DataTypes as SequelizeDataTypes,
+    Model
+} from 'sequelize';
+
+export interface UserAttributes {
+    id ? : string;
+    username ? : string;
+    email ? : string;
+    password ? : string;
+
+}
+
+export interface UserInstance extends Model<UserAttributes> {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+
+    username: string;
+    email: string;
+    password: string;
+
+}
+
+const User = (sequelize: Sequelize, DataTypes: typeof SequelizeDataTypes) => {
+    var User = sequelize.define<UserInstance>('User', {
+        id: DataTypes.UUID,
+        username: DataTypes.STRING,
+        email: DataTypes.STRING,
+        password: DataTypes.STRING
+    });
+
+    User.associate = function(models) {
+        // associations can be defined here
+    };
+
+    return User;
+};
+
+export default User
